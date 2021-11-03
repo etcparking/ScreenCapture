@@ -35,12 +35,13 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * Created by panj on 2017/5/22.
+ * Modify by jambestwick on 2021/10/05 fix record when close bug
  */
 
 public class ScreenCapture {
 
     private static String TAG = ScreenCapture.class.getName();
-    private AppCompatActivity mActivity;
+    private final Activity mActivity;
 
     private final int REQUEST_CODE_SAVE_IMAGE_FILE = 110;
 
@@ -98,11 +99,7 @@ public class ScreenCapture {
         this.mCaptureListener = captureListener;
     }
 
-    public static ScreenCapture newInstance(AppCompatActivity activity) {
-        return new ScreenCapture(activity);
-    }
-
-    public ScreenCapture(AppCompatActivity activity) {
+    public ScreenCapture(Activity activity) {
         this.mActivity = activity;
         createEnvironment();
     }
@@ -464,16 +461,13 @@ public class ScreenCapture {
         if (mMediaCodec != null) {
             mMediaCodec.stop();
             mMediaCodec.release();
-           //mMediaCodec = null;
         }
         if (mVirtualDisplay != null) {
             mVirtualDisplay.release();
-            //mVirtualDisplay = null;
         }
         if (mMuxer != null) {
             mMuxer.stop();
             mMuxer.release();
-            //mMuxer = null;
         }
     }
 
@@ -482,9 +476,6 @@ public class ScreenCapture {
         if (requestCode == REQUEST_MEDIA_PROJECTION) {
             if (resultCode != Activity.RESULT_OK) {
                 Log.w(TAG, "User cancelled.");
-                return;
-            }
-            if (this == null) {
                 return;
             }
             mResultCode = resultCode;
