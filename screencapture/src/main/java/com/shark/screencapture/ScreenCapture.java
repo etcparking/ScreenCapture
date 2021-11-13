@@ -215,9 +215,6 @@ public class ScreenCapture {
 
     private boolean startScreenCapture() {
         Log.d(TAG, "startScreenCapture");
-        if (this == null) {
-            return false;
-        }
         if (mMediaProjection != null) {
             setUpVirtualDisplay();
             return true;
@@ -261,7 +258,6 @@ public class ScreenCapture {
                 } else {
                     mActivity.requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_CODE_SAVE_IMAGE_FILE);
                 }
-                return;
             } else {
                 if (isScreenshot) {
                     saveToFile();
@@ -348,8 +344,8 @@ public class ScreenCapture {
 
     private void startRecord() {
         try {
-            if (!mVideoPath.substring(mVideoPath.length() - 1, mVideoPath.length()).equals("/")) {
-                mVideoPath = mVideoPath + "/";
+         if (!mVideoPath.endsWith("/")) {
+                mVideoPath = mVideoPath + File.separator;
             }
             File fileFolder = new File(mVideoPath);
             if (!fileFolder.exists())
@@ -371,9 +367,7 @@ public class ScreenCapture {
             }
             e.printStackTrace();
             release();//录制视频出现异常时，释放资源，finally释放资源会导致本类对象重复录制视频无法使用
-        } finally {
-           
-        }
+        } 
     }
 
     private void recordStop() {
