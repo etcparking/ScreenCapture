@@ -37,7 +37,7 @@ public class MainActivity extends AppCompatActivity {
         mVideoView.setVisibility(View.GONE);
 
         if (mScreenCapture == null) {
-            mScreenCapture = new ScreenCapture(this);
+            mScreenCapture =new ScreenCapture(this);
             mScreenCapture.setCaptureListener(new ScreenCapture.OnCaptureListener() {
                 @Override
                 public void onScreenCaptureSuccess(Bitmap bitmap, String savePath) {

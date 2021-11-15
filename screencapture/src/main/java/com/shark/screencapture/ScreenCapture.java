@@ -35,12 +35,13 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * Created by panj on 2017/5/22.
+ * Modify by jambestwick on 2021/10/05 fix record when close bug
  */
 
 public class ScreenCapture {
 
     private static String TAG = ScreenCapture.class.getName();
-    private AppCompatActivity mActivity;
+    private final Activity mActivity;
 
     private final int REQUEST_CODE_SAVE_IMAGE_FILE = 110;
 
@@ -98,7 +99,8 @@ public class ScreenCapture {
         this.mCaptureListener = captureListener;
     }
 
-    public ScreenCapture(AppCompatActivity activity) {
+
+    public ScreenCapture(Activity activity) {
         this.mActivity = activity;
         createEnvironment();
     }
@@ -257,7 +259,6 @@ public class ScreenCapture {
                 } else {
                     mActivity.requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_CODE_SAVE_IMAGE_FILE);
                 }
-                return;
             } else {
                 if (isScreenshot) {
                     saveToFile();
@@ -344,8 +345,8 @@ public class ScreenCapture {
 
     private void startRecord() {
         try {
-            if (!mVideoPath.substring(mVideoPath.length() - 1, mVideoPath.length()).equals("/")) {
-                mVideoPath = mVideoPath + "/";
+         if (!mVideoPath.endsWith("/")) {
+                mVideoPath = mVideoPath + File.separator;
             }
             File fileFolder = new File(mVideoPath);
             if (!fileFolder.exists())
@@ -367,7 +368,8 @@ public class ScreenCapture {
             }
             e.printStackTrace();
             release();//录制视频出现异常时，释放资源，finally释放资源会导致本类对象重复录制视频无法使用
-        }
+
+        } 
     }
 
     private void recordStop() {
@@ -455,16 +457,13 @@ public class ScreenCapture {
         if (mMediaCodec != null) {
             mMediaCodec.stop();
             mMediaCodec.release();
-           //mMediaCodec = null;
         }
         if (mVirtualDisplay != null) {
             mVirtualDisplay.release();
-            //mVirtualDisplay = null;
         }
         if (mMuxer != null) {
             mMuxer.stop();
             mMuxer.release();
-            //mMuxer = null;
         }
     }
 
@@ -473,9 +472,6 @@ public class ScreenCapture {
         if (requestCode == REQUEST_MEDIA_PROJECTION) {
             if (resultCode != Activity.RESULT_OK) {
                 Log.w(TAG, "User cancelled.");
-                return;
-            }
-            if (this == null) {
                 return;
             }
             mResultCode = resultCode;
