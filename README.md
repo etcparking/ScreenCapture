@@ -1,5 +1,6 @@
 # ScreenCapture
 ## android 录屏软件
+## android 合并多个视频软件
 Use MediaProjection to get Screen Capture.
 
 
@@ -116,4 +117,21 @@ if (mScreenCapture != null) {
             mScreenCapture = null;
         }
     }
+```
+
+### 将2个视频文件，拼接为一个文件，拼接前提是，2个文件的编码信息一样，包括video codec(H264的话，包括profile/level) video width/height, audio codec, audio sample rate, channel number ###
+### VideoComposer ###
+```android
+  public VideoComposer(ArrayList<String> videoList, String outFilename) {
+        mVideoList = videoList;
+        this.mOutFilename = outFilename;
+        mReadBuf = ByteBuffer.allocate(1048576);
+    }
+    
+    /**
+    **拼接视频的方法
+    */
+    public boolean joinVideo(){
+    }
+
 ```
