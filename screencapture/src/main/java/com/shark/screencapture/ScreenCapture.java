@@ -99,6 +99,7 @@ public class ScreenCapture {
         this.mCaptureListener = captureListener;
     }
 
+
     public ScreenCapture(Activity activity) {
         this.mActivity = activity;
         createEnvironment();
@@ -367,6 +368,7 @@ public class ScreenCapture {
             }
             e.printStackTrace();
             release();//录制视频出现异常时，释放资源，finally释放资源会导致本类对象重复录制视频无法使用
+
         } 
     }
 
